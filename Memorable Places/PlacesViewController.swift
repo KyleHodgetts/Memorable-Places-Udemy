@@ -8,19 +8,31 @@
 
 import UIKit
 
-class PlacesViewController: UIViewController {
+class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    var places: [Place]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        places = UserDefaults.standard.array(forKey: "places") as! [Place]
+        if places == nil {
+            places = []
+        }
     }
     
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return places.count
+    }
+    
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
+        cell.textLabel?.text = places[indexPath.row].name
+        return cell
+    }
+    
+    // TODO If array is empty, provide a message to add a place
+    // TODO when a place is clicked, reaveals map with pin (segue)
+    // TODO process a place from MAP
 
     /*
     // MARK: - Navigation
