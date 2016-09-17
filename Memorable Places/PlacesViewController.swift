@@ -14,7 +14,7 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        places = UserDefaults.standard.array(forKey: "places") as! [Place]
+        places = UserDefaults.standard.array(forKey: "places") as? [Place]
         if places == nil {
             places = []
         }
