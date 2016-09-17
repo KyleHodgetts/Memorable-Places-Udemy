@@ -14,10 +14,13 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        places = UserDefaults.standard.array(forKey: "places") as? [Place]
+        if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
+            places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
+        }
         if places == nil {
             places = []
         }
+        print(places)
     }
     
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

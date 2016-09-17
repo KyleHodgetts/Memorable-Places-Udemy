@@ -28,6 +28,13 @@
                             <constraint firstItem="uQH-Qz-ggO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="rGS-BI-3G0"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Map" id="ttc-cq-oHm">
+                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="gne-u0-jiB">
+                            <connections>
+                                <action selector="findMeTapped:" destination="BYZ-38-t0r" id="KgC-aV-2PH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="map" destination="uQH-Qz-ggO" id="noA-gY-vxA"/>
                     </connections>
@@ -60,7 +67,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Places" id="brc-4r-wpi">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="CvS-Rr-cS7">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="CvS-Rr-cS7">
                             <connections>
                                 <segue destination="BYZ-38-t0r" kind="show" id="6G4-92-Bja"/>
                             </connections>
