@@ -22,7 +22,6 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         NotificationCenter.default.addObserver(self, selector: #selector(PlacesViewController.updateTable), name: .placesNotifyUpdate, object: nil)
         
         updateTable()
-        print(places)
     }
     
     // MARK: - Navigation
