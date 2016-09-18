@@ -130,6 +130,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         places.append(place)
         let data = NSKeyedArchiver.archivedData(withRootObject: places)
         UserDefaults.standard.set(data, forKey: "places")
+        
+        NotificationCenter.default.post(name: .placesNotifyUpdate, object: nil)
     }
     
     private func updateMap(activePlace: Place) {

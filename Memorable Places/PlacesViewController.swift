@@ -10,16 +10,15 @@ import UIKit
 
 class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet var table: UITableView!
     var places: [Place]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
-            places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
-        }
-        if places == nil {
-            places = []
-        }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(PlacesViewController.updateTable), name: .placesNotifyUpdate, object: nil)
+        
+        updateTable()
         print(places)
     }
     
@@ -31,6 +30,16 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Cell")
         cell.textLabel?.text = places[indexPath.row].name
         return cell
+    }
+    
+    func updateTable() {
+        if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
+            places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
+        }
+        if places == nil {
+            places = []
+        }
+        table.reloadData()
     }
     
     // TODO If array is empty, provide a message to add a place

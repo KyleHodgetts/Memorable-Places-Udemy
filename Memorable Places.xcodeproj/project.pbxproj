@@ -15,6 +15,7 @@
 		981537E81D8C442400C833E4 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 981537E71D8C442400C833E4 /* CoreLocation.framework */; };
 		988B29C01D8C4C1900458A40 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988B29BF1D8C4C1900458A40 /* Place.swift */; };
 		988B29C21D8C4FFD00458A40 /* PlacesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988B29C11D8C4FFD00458A40 /* PlacesViewController.swift */; };
+		98AAB7FF1D8ECBDA00FFF928 /* ExtensionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98AAB7FE1D8ECBDA00FFF928 /* ExtensionNotification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		981537E71D8C442400C833E4 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		988B29BF1D8C4C1900458A40 /* Place.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = "<group>"; };
 		988B29C11D8C4FFD00458A40 /* PlacesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesViewController.swift; sourceTree = "<group>"; };
+		98AAB7FE1D8ECBDA00FFF928 /* ExtensionNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionNotification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				981537E01D8C3B3D00C833E4 /* Info.plist */,
 				988B29BF1D8C4C1900458A40 /* Place.swift */,
 				988B29C11D8C4FFD00458A40 /* PlacesViewController.swift */,
+				98AAB7FE1D8ECBDA00FFF928 /* ExtensionNotification.swift */,
 			);
 			path = "Memorable Places";
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98AAB7FF1D8ECBDA00FFF928 /* ExtensionNotification.swift in Sources */,
 				988B29C21D8C4FFD00458A40 /* PlacesViewController.swift in Sources */,
 				988B29C01D8C4C1900458A40 /* Place.swift in Sources */,
 				981537D71D8C3B3D00C833E4 /* MapViewController.swift in Sources */,
