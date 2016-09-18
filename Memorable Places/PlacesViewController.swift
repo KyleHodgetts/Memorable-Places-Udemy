@@ -63,6 +63,22 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    internal func numberOfSections(in tableView: UITableView) -> Int {
+        if places.count > 0 {
+            table.separatorStyle = .singleLine
+            table.backgroundView = nil
+        }
+        else {
+            let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: table.bounds.size.width, height: table.bounds.size.height))
+            noDataLabel.text = "You have no memorable places :("
+            noDataLabel.textColor = UIColor.black
+            noDataLabel.textAlignment = .center
+            table.backgroundView = noDataLabel
+            table.separatorStyle = .none
+        }
+        return 1
+    }
+    
     // END MARK: - Table delegate methods
     
     // MARK: - Helper methods for updating data and UI
