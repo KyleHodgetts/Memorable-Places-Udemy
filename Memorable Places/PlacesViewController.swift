@@ -12,7 +12,8 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     @IBOutlet var table: UITableView!
     var places: [Place]!
-
+    var activePlace: Place?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +33,11 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        activePlace = places[indexPath.row]
+        performSegue(withIdentifier: "showMemorablePlace", sender: nil)
+    }
+    
     func updateTable() {
         if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
             places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
@@ -46,14 +52,16 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // TODO when a place is clicked, reaveals map with pin (segue)
     // TODO process a place from MAP
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "showMemorablePlace" {
+            if let ap = activePlace {
+                let mapVC = segue.destination as! MapViewController
+                mapVC.activePlace = ap
+                
+            }
+        }
     }
-    */
 
 }
