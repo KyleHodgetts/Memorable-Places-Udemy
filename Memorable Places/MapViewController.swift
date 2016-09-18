@@ -24,27 +24,35 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Set up initial map settings
         let initialSpan: MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lonDelta)
         map.region.span = initialSpan
         map.delegate = self
+        
+        // Set up location manager settings
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         
+        // Set up long press gesture recogniser for when a when a new memorable place is added
         let longPressGestureRecogniser = UILongPressGestureRecognizer(target: self, action: #selector(MapViewController.longPress(gestureRecogniser:)))
-        
-        longPressGestureRecogniser.minimumPressDuration = 2
+        longPressGestureRecogniser.minimumPressDuration = 1
         map.addGestureRecognizer(longPressGestureRecogniser)
 
+        // If an active place was passed from PlacesVC, show it with the annotation
         if let ap = activePlace {
             updateMap(activePlace: ap)
+            addAnnotation(place: ap)
         }
+        // Otherwise find the users current location
         else {
             locationManager.startUpdatingLocation()
         }
     }
     
     @IBAction func findMeTapped(_ sender: UIBarButtonItem) {
+        // Briefly grab the current location
         locationManager.startUpdatingLocation()
     }
     
@@ -77,7 +85,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             else {
                 if let placeMark = placemarks?[0] {
                     let placeName = self.getAddressFromPlaceMark(placeMark: placeMark)
-                    self.addAnnotation(placeName: placeName, coordinate: coordinate)
+                    self.addNewMemorablePlace(placeName: placeName, coordinate: coordinate)
                 }
             }
         })
@@ -96,8 +104,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
         return placeName
     }
     
-    private func addAnnotation(placeName: String, coordinate: CLLocationCoordinate2D) {
-        
+    private func addNewMemorablePlace(placeName: String, coordinate: CLLocationCoordinate2D) {
         let alert = UIAlertController(title: "New memorable place", message: "Add a note for this memorable place", preferredStyle: .alert)
         
         alert.addTextField(configurationHandler: nil)
@@ -107,29 +114,32 @@ class MapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerD
             let note = textField.text!
             
             self.activePlace = Place(name: placeName, note: note, latitude: coordinate.latitude, longitude: coordinate.longitude)
-            
-            let annotation  = MKPointAnnotation()
-            annotation.coordinate = self.activePlace!.location
-            annotation.title = self.activePlace?.name
-            annotation.subtitle = self.activePlace!.note
-            
-            self.map.addAnnotation(annotation)
+            self.addAnnotation(place: self.activePlace!)
             self.savePlace(place: self.activePlace!)
         }))
         
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func addAnnotation(place: Place) {
+        let annotation  = MKPointAnnotation()
+        annotation.coordinate = place.location
+        annotation.title = place.name
+        annotation.subtitle = place.note
+        
+        self.map.addAnnotation(annotation)
         
     }
     
     private func savePlace(place: Place) {
         var places: [Place] = []
-        if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
+        if let data = UserDefaults.standard.object(forKey: PlacesViewController.placesArrayKey) as? NSData {
             places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
         }
         
         places.append(place)
         let data = NSKeyedArchiver.archivedData(withRootObject: places)
-        UserDefaults.standard.set(data, forKey: "places")
+        UserDefaults.standard.set(data, forKey: PlacesViewController.placesArrayKey)
         
         NotificationCenter.default.post(name: .placesNotifyUpdate, object: nil)
     }

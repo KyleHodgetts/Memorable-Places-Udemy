@@ -10,6 +10,8 @@ import UIKit
 
 class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    static let placesArrayKey = "places"
+    
     @IBOutlet var table: UITableView!
     var places: [Place]!
     var activePlace: Place?
@@ -23,6 +25,20 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         print(places)
     }
     
+    // MARK: - Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showMemorablePlace" {
+            if let ap = activePlace {
+                let mapVC = segue.destination as! MapViewController
+                mapVC.activePlace = ap
+            }
+        }
+    }
+    
+    // END MARK: - Navigation
+    
+    // MARK: - Table delegate methods
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return places.count
     }
@@ -33,11 +49,26 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activePlace = places[indexPath.row]
         performSegue(withIdentifier: "showMemorablePlace", sender: nil)
     }
     
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            places.remove(at: indexPath.row)
+            table.deleteRows(at: [indexPath], with: .automatic)
+            
+            updateStorage()
+        }
+    }
+    
+    // END MARK: - Table delegate methods
+    
+    // MARK: - Helper methods for updating data and UI
+    
+    // Not private so it is accessible to post notification in MapVC to update table
+    // when a new place is added
     func updateTable() {
         if let data = UserDefaults.standard.object(forKey: "places") as? NSData {
             places = NSKeyedUnarchiver.unarchiveObject(with: data as Data) as! [Place]
@@ -48,20 +79,12 @@ class PlacesViewController: UIViewController, UITableViewDelegate, UITableViewDa
         table.reloadData()
     }
     
-    // TODO If array is empty, provide a message to add a place
-    // TODO when a place is clicked, reaveals map with pin (segue)
-    // TODO process a place from MAP
-
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showMemorablePlace" {
-            if let ap = activePlace {
-                let mapVC = segue.destination as! MapViewController
-                mapVC.activePlace = ap
-                
-            }
-        }
+    private func updateStorage() {
+        let data = NSKeyedArchiver.archivedData(withRootObject: places)
+        UserDefaults.standard.set(data, forKey: PlacesViewController.placesArrayKey)
     }
+    // END MARK: - Helper methods for updating data and UI
 
+    
+    // TODO If array is empty, provide a message to add a place
 }
